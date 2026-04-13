@@ -7,6 +7,7 @@ using MediaBrowser.Common.Plugins;
 using MediaBrowser.Model.Plugins;
 using MediaBrowser.Model.Serialization;
 
+
 namespace AxFlix.Plugin;
 
 /// <summary>
@@ -56,4 +57,5 @@ public class Plugin : BasePlugin<PluginConfiguration>, IHasWebPages
             }
         };
     }
+
 }

@@ -25,6 +25,8 @@
     <EmbeddedResource Include="Web\axflix-studios.js" />
     <None Remove="Web\axflix-studios.css" />
     <EmbeddedResource Include="Web\axflix-studios.css" />
+    <None Remove="logo.png" />
+    <EmbeddedResource Include="logo.png" />
   </ItemGroup>
 
 </Project>

@@ -6,14 +6,15 @@
     "overview": "Ajoute une interface immersive pour mettre en valeur les franchises et studios de cinéma.",
     "owner": "AxFlix",
     "category": "General",
+    "imageUrl": "https://raw.githubusercontent.com/axFury/AxFlix-Studio-Bar/main/logo.png",
     "versions": [
       {
         "version": "1.0.0.0",
-        "changelog": "Première publication officielle: Intégration de la barre de studios sur l'accueil, sélection de vidéos (theme media) au survol et page de configuration dédiée.",
+        "changelog": "Première publication officielle: Intégration de la barre de studios sur l'accueil, sélection de vidéos au survol, configuration dédiée et logo ajouté.",
         "targetAbi": "10.11.0.0",
         "sourceUrl": "https://raw.githubusercontent.com/axFury/AxFlix-Studio-Bar/main/releases/v1.0.0.0/AxFlix.Plugin_1.0.0.0.zip",
-        "checksum": "e22cb0949421d48ac6b34ef246f632cd",
-        "timestamp": "2026-04-13T13:30:00Z"
+        "checksum": "ff4d2bd7b006567546fdefb1f9cf6b67",
+        "timestamp": "2026-04-13T13:40:00Z"
       }
     ]
   }

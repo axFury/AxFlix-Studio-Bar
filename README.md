@@ -1,5 +1,9 @@
 # AxFlix Studios Plugin for Jellyfin
 
+<p align="center">
+  <img src="logo.png" alt="AxFlix Studios Logo" width="300"/>
+</p>
+
 This plugin enhances your Jellyfin interface by adding a beautifully animated row of studios and franchises directly on your Jellyfin home page.
 
 ## Features
