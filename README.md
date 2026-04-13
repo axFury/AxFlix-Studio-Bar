@@ -9,42 +9,43 @@ This plugin enhances your Jellyfin interface by adding a beautifully animated ro
 - **Smart Deduplication**: Merges variants of the same studio automatically (e.g. "Disney", "Walt Disney", "Walt Disney Pictures").
 - **Native Navigation**: Clicking a studio takes you to the native Jellyfin library filter, showing all movies for that specific studio natively.
 
-## Installation
+## Recommended Plugins & Setup
 
-### Manual Installation (From Source)
+The AxFlix Studio Plugin is completely autonomous, but for the **Video Hover** functionality to give its best result, your Jellyfin server must be populated with "Theme Videos".
 
-1. Clone the repository on your Jellyfin server:
-   ```bash
-   git clone https://github.com/axFury/AxFlix-Studio-Bar.git
-   ```
-2. Navigate into the cloned folder:
-   ```bash
-   cd AxFlix-Studio-Bar
-   ```
-3. Ensure you have the **.NET 9.0 SDK** installed on your server (required to build Jellyfin 10.11.x plugins).
-4. Run the deploy script (this script automatically builds the plugin, places the DLL in your Jellyfin plugins folder, and restarts the Jellyfin service):
-   ```bash
-   sudo ./deploy.sh
-   ```
-   *(Note: You may need to edit `deploy.sh` if your Jellyfin plugins directory is located somewhere other than `/var/lib/jellyfin/plugins`)*
+1. **Theme Media Plugin** (Optional but Recommended): Install a "Theme Media" plugin from the official Jellyfin catalog to automatically download theme videos (`theme.mp4`) for your media.
+2. **TMDb Box Sets** (Optional): Excellent for organizing your movie franchises (Marvel, Star Wars) which you can map as studios.
 
-### Setup
+As long as Jellyfin detects "Theme Media" for a studio or franchise, the AxFlix plugin will be able to play it!
 
-1. Once installed, navigate to your Jellyfin Dashboard.
-2. Go to **Plugins**, and look for **AxFlix Studios**.
+## Installation (Via Store)
+
+This is the recommended method. It allows you to get automatic updates!
+
+1. Open your Jellyfin Dashboard.
+2. Navigate to **Plugins** (under the Advanced section), then click on the **Repositories** tab.
+3. Click the **`+`** icon to add a new repository.
+4. Fill in the fields:
+   * **Repository Name**: `AxFlix Repository`
+   * **Repository URL**: `https://raw.githubusercontent.com/axFury/AxFlix-Studio-Bar/main/manifest.json`
+5. Click **Save**.
+6. Go back to the **Catalog** tab.
+7. Scroll down to the `General` category, and you will see **AxFlix Studios**. Click on it and press **Install**.
+8. **Restart your Jellyfin server** so the plugin can load.
+
+## Configuration
+
+1. Once installed and restarted, navigate to your Jellyfin Dashboard.
+2. Go to **Plugins**, and click on **AxFlix Studios**.
 3. Open the configuration page to enable/disable specific studios, map aliases, or adjust settings.
 4. Go back to your Jellyfin homepage, and enjoy your new Studio bar!
 
-## Compatibility
+## Manual Installation (From Source)
 
-- Designed for **Jellyfin 10.11.0.0** (Target ABI) and later.
-- Compatible with all web-based clients that support Jellyfin's custom HTML/CSS injections.
-
-## Development
-
-If you wish to contribute or modify the plugin:
-- C# Backend is heavily integrated with the Jellyfin Server API (`MediaBrowser.Controller`, `Common`, etc).
-- The Javascript and CSS that power the hover effects and DOM injections are located in `AxFlix.Plugin/Web/`.
+If you are a developer or want to build it yourself:
+1. Clone the repository on your Jellyfin server.
+2. Ensure you have the **.NET 9.0 SDK** installed (`dotnet build`).
+3. Run the deployment script: `sudo ./deploy.sh`
 
 ## License
 
