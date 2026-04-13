@@ -1,0 +1,151 @@
+<div id="AxFlixConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+    <div data-role="content">
+        <div class="content-primary">
+            <form id="axflixConfigForm">
+                <div class="verticalSection">
+                    <h2 class="sectionTitle">🎬 AxFlix Studios</h2>
+                    <p style="color:rgba(255,255,255,0.5);margin-top:-0.5em;margin-bottom:1.5em;">
+                        Bandeau de studios avec logos et vidéos d'intro au survol — v1.0
+                    </p>
+                </div>
+
+                <div class="verticalSection">
+                    <h3 class="sectionTitle">⚙️ Paramètres Généraux</h3>
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label class="emby-checkbox-label">
+                            <input id="chkEnableStudioRow" type="checkbox" is="emby-checkbox" />
+                            <span>Activer le bandeau Studios</span>
+                        </label>
+                        <div class="fieldDescription">Affiche une ligne horizontale de studios avec logos sur la page d'accueil</div>
+                    </div>
+                </div>
+
+                <div class="verticalSection">
+                    <h3 class="sectionTitle">🏢 Studios Sélectionnés</h3>
+                    <p class="fieldDescription" style="margin-bottom:1em;">
+                        Saisissez des mots-clés pour filtrer les studios (ex: <code>netflix, disney, apple, paramount, warner, hbo</code>). Séparés par des virgules.
+                    </p>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="txtSelectedStudios">
+                            Mots-clés des studios (filtre partiel autorisé)
+                        </label>
+                        <input id="txtSelectedStudios" type="text" is="emby-input" placeholder="Netflix, Disney, Apple, Paramount, Warner" />
+                    </div>
+                </div>
+
+                <div class="verticalSection">
+                    <h3 class="sectionTitle">🎥 Vidéos d'Intro</h3>
+                    <p class="fieldDescription" style="margin-bottom:1em;">
+                        Placez vos vidéos d'intro dans le dossier ci-dessous. Le nom de la vidéo doit correspondre au studio.
+                    </p>
+                    <div class="inputContainer">
+                        <label class="inputLabel inputLabelUnfocused" for="txtIntroPath">
+                            Chemin du dossier des intros
+                        </label>
+                        <input id="txtIntroPath" type="text" is="emby-input" placeholder="/mnt/media/studio-intros" />
+                    </div>
+                    <div id="introStatus" style="margin-top:0.5em;"></div>
+                </div>
+
+                <div class="verticalSection" style="margin-top:1.5em;">
+                    <button id="btnSave" is="emby-button" type="submit" class="raised button-submit block emby-button">
+                        <span>💾 Sauvegarder</span>
+                    </button>
+                </div>
+
+                <div id="saveStatus" style="margin-top:0.8em;display:none;padding:0.6em 0.8em;border-radius:6px;background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.25);color:#34d399;">
+                    ✅ Configuration sauvegardée !
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var AxFlixConfigPage = {
+            pluginId: 'a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d'
+        };
+
+        function loadAxFlixConfig(page) {
+            if (window.Dashboard) {
+                try { Dashboard.showLoadingMsg(); } catch (e) { }
+            }
+
+            ApiClient.getPluginConfiguration(AxFlixConfigPage.pluginId).then(function (config) {
+                
+                var chk = page.querySelector('#chkEnableStudioRow');
+                if (chk) chk.checked = (config.EnableStudioRow !== false);
+
+                var txtIntro = page.querySelector('#txtIntroPath');
+                if (txtIntro) txtIntro.value = config.IntroVideosPath || '/mnt/media/studio-intros';
+                
+                var txtStudios = page.querySelector('#txtSelectedStudios');
+                if (txtStudios) txtStudios.value = config.SelectedStudioNames || 'Netflix, Disney, Apple, Paramount, Warner, HBO, Amazon';
+
+                // API Status Check
+                ApiClient.fetch({ url: ApiClient.getUrl('axflix/config'), type: 'GET', dataType: 'json' })
+                    .then(function (status) {
+                        var el = page.querySelector('#introStatus');
+                        if (!el) return;
+                        if (status.IntrosFolderExists) {
+                            el.innerHTML = '<p style="color:#34d399;">✅ Dossier d\'intros trouvé</p>';
+                        } else {
+                            el.innerHTML = '<p style="color:#f87171;">⚠️ Dossier d\'intros non trouvé — créez le dossier et ajoutez vos vidéos</p>';
+                        }
+                    }).catch(function() { });
+
+                if (window.Dashboard) {
+                    try { Dashboard.hideLoadingMsg(); } catch (e) { }
+                }
+            }).catch(function(e) {
+                console.error('[AxFlix] Error loading config:', e);
+                if (window.Dashboard) {
+                    try { Dashboard.hideLoadingMsg(); } catch (e) { }
+                }
+            });
+        }
+
+        document.querySelector('#AxFlixConfigPage').addEventListener('pageshow', function () {
+            loadAxFlixConfig(this);
+        });
+
+        document.querySelector('#axflixConfigForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (window.Dashboard) {
+                try { Dashboard.showLoadingMsg(); } catch (e) { }
+            }
+
+            var page = document.querySelector('#AxFlixConfigPage');
+            ApiClient.getPluginConfiguration(AxFlixConfigPage.pluginId).then(function (config) {
+                
+                var chk = page.querySelector('#chkEnableStudioRow');
+                if (chk) config.EnableStudioRow = chk.checked;
+
+                var txtIntro = page.querySelector('#txtIntroPath');
+                if (txtIntro) config.IntroVideosPath = txtIntro.value;
+                
+                var txtStudios = page.querySelector('#txtSelectedStudios');
+                if (txtStudios) config.SelectedStudioNames = txtStudios.value;
+                
+                config.MaxStudios = 30; // Hardcode to avoid validation issue if field is missing
+
+                ApiClient.updatePluginConfiguration(AxFlixConfigPage.pluginId, config).then(function () {
+                    if (window.Dashboard) {
+                        try { Dashboard.processPluginConfigurationUpdateResult(); } catch (e) { }
+                    }
+                    
+                    var status = page.querySelector('#saveStatus');
+                    if (status) {
+                        status.style.display = 'block';
+                        setTimeout(function () {
+                            status.style.display = 'none';
+                        }, 5000);
+                    }
+                });
+            });
+
+            return false;
+        });
+    </script>
+</div>

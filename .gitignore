@@ -1,0 +1,10 @@
+bin/
+obj/
+*.user
+.idea/
+.vscode/
+.DS_Store
+dotnet-install.sh
+*.suo
+*.userosscache
+*.sln.docstates
