@@ -1,4 +1,4 @@
-# AxFlix Studios Plugin for Jellyfin
+# jellyfin-plugin-studio-showcase
 
 <p align="center">
   <img src="logo.png" alt="AxFlix Studios Logo" width="300"/>
